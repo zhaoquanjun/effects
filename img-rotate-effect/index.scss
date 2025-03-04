@@ -1,0 +1,77 @@
+@use 'sass:math';
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+$size: 300px;
+$n: 6;
+$r: $size / 2;
+$deg: 360deg / $n;
+$R: math.abs($r / math.sin($deg / 2));
+$iw: $R * 2;
+$duration: 1.5s;
+$gap: 0.3s;
+
+.container {
+  position: relative;
+  margin: 100px auto;
+  width: $size;
+  height: $size;
+  border-radius: 50%;
+  outline: 1px solid #eee;
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+
+  .inner {
+    position: relative;
+    flex-shrink: 0;
+    margin-top: $r;
+    width: $iw;
+    height: $iw;
+    animation: rotation $duration * $n linear infinite;
+    animation-play-state: running;
+    img {
+      position: absolute;
+      left: 50%;
+      margin-left: -$r;
+      margin-top: -$r;
+      width: $size;
+      height: $size;
+      transform-origin: center $R + $r;
+      border-radius: 50%;
+      pointer-events: none;
+
+      @for $i from 1 through $n {
+        &:nth-child(#{$i}) {
+          transform: rotate($deg * $i);
+        }
+      }
+    }
+  }
+
+  &:hover {
+    cursor: pointer;
+    .inner {
+      animation-play-state: paused;
+    }
+  }
+}
+// @debug "123: #{$gap / ($duration * $n)}";
+@keyframes rotation {
+  
+  @for $i from 1 through $n {
+    $per: ($i / $n) * 100  + '%';
+    $tper: $i / $n;
+    $tgap: calc($gap / ($duration * $n));
+    $prev: ($tper - $tgap) * 100 + '%';
+    #{$prev},
+    #{$per} {
+      transform: rotate(-$deg * ($i));
+    }
+  }
+}
+

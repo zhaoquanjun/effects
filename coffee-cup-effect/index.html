@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>coffee-cup</title>
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <div class="cup">
+      <ul class="menus"></ul>
+      <div class="cup-inner"></div>
+    </div>
+  </body>
+</html>
+<script>
+  const coffees = [
+    {
+      name: '冰美式',
+      id: 'bm',
+      water: 0.4,
+      bean: 0.4,
+      milk: 0.1
+    },
+    {
+      name: '椰蓉美式',
+      id: 'yr',
+      ice: 0.1,
+      water: 0.2,
+      bean: 0.2,
+      coconut: 0.3
+    },
+    {
+      name: '抹茶',
+      id: 'mc',
+      mocha: 0.4,
+      water: 0.4,
+      ice: 0.1
+    },
+    {
+      name: '抓马西瓜小铁',
+      id: 'zm',
+      ice: 0.1,
+      water: 0.4,
+      bean: 0.1,
+      watermelon: 0.4
+    },
+    {
+      name: '摩卡',
+      id: 'mk',
+      ice: 0.1,
+      water: 0.2,
+      bean: 0.1,
+      mocha: 0.2
+    },
+    {
+      name: '拿铁',
+      id: 'nt',
+      ice: 0.1,
+      water: 0.2,
+      bean: 0.1,
+      mocha: 0.2
+    },
+    {
+      name: '生椰拿铁',
+      id: 'synt',
+      ice: 0.1,
+      water: 0.2,
+      bean: 0.1,
+      mocha: 0.2
+    },
+    {
+      name: '加浓美式',
+      id: 'jnms',
+      ice: 0.1,
+      water: 0.2,
+      bean: 0.1,
+      mocha: 0.2
+    },
+    {
+      name: '耶加雪菲',
+      id: 'yjxf',
+      ice: 0.1,
+      water: 0.2,
+      bean: 0.1,
+      mocha: 0.2
+    }
+  ]
+
+  const colors = {
+    ice: '#eeeeee',
+    water: '#ffffff',
+    milk: '#f6f5f7',
+    bean: '#40240a',
+    coconut: '#ac6b30',
+    mocha: '#c8701e',
+    watermelon: '#ea3d74'
+  }
+
+  let activeName = coffees[0].id
+  createCoffeeElement(coffees[0])
+  createMenuElement()
+
+  function createCoffeeElement(co) {
+    const wrapper = document.querySelector('.cup-inner')
+    const frag = document.createDocumentFragment()
+    const base = 300
+    const keys = Object.keys(co).filter(vk => !['name', 'id'].includes(vk))
+    for (let i = 0; i < keys.length; i++) {
+      const li = document.createElement('li')
+      li.classList.add('element')
+      li.dataset.value = co[keys[i]]
+      li.style.height = 0
+      li.style.backgroundColor = colors[keys[i]]
+      frag.appendChild(li)
+    }
+    wrapper.innerHTML = ''
+    wrapper.appendChild(frag)
+
+    requestAnimationFrame(() => {
+      document.querySelectorAll('.element').forEach((vk, i) => {
+        console.log(i * 200 + co[keys[i]] * 100)
+        vk.dataset.time = co[keys[i]] * 300
+        setTimeout(() => {
+          vk.style.height = co[keys[i]] * base + 'px'
+          if (i > 0) {
+            const mb = co[keys[i]] * base * 0.4 > 30 ? 30 : co[keys[i]] * base * 0.4
+            vk.style.marginBottom = -mb + 'px'
+          }
+        }, i * 200 + co[keys[i]] * 300)
+      })
+    })
+  }
+
+  function createMenuElement() {
+    const frag = document.createDocumentFragment()
+    const list = [...coffees, ...coffees]
+    const deg = 360 / list.length
+    for (let i = 0; i < list.length; i++) {
+      const li = document.createElement('li')
+      const p = document.createElement('p')
+      const key = list[i].id
+      li.classList.add('item')
+      li.classList.add(key)
+      li.dataset.key = key
+      if (key == activeName) {
+        li.classList.add('active')
+      }
+      p.innerText = list[i].name
+      li.style.transform = `translateY(-50%) rotate(${deg * i}deg)`
+      li.appendChild(p)
+      addEvent(li)
+      frag.appendChild(li)
+    }
+    document.querySelector('.menus').appendChild(frag)
+  }
+
+  function addEvent(el) {
+    el.addEventListener('click', function (e) {
+      const target = e.target.tagName.toUpperCase() == 'P' ? e.target.parentNode : e.target
+      const key = target.dataset.key
+      activeName = key
+      const list = document.querySelectorAll('.item')
+      const current = coffees.find(vk => vk.id == key)
+
+      createCoffeeElement(current)
+      list.forEach(vk => {
+        const active = vk.classList.contains(activeName)
+        if (active) {
+          vk.classList.add('active')
+        } else {
+          vk.classList.remove('active')
+        }
+      })
+    })
+  }
+</script>

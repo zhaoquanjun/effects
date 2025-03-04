@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>color change</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        width: 100%;
+        height: 100%;
+      }
+      body {
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(var(--c1), var(--c2), var(--c3));
+        transition: 0.5s;
+      }
+      .container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        width: 800px;
+        z-index: 99;
+      }
+
+      .container div {
+        margin-bottom: 1px;
+        width: 400px;
+        height: 230px;
+        overflow: hidden;
+      }
+
+      .container div img {
+        display: block;
+        width: 100%;
+        object-fit: contain;
+        transition: 0.5s;
+      }
+
+      .container div img.fadeout {
+        opacity: 0.35;
+        z-index: 1;
+        perspective: -30px;
+      }
+
+      .container div img.fadein {
+        opacity: 1;
+        z-index: 11;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="item"><img src="./assets/1.png" crossorigin="anonymous" alt="" /></div>
+      <div class="item"><img src="./assets/2.png" crossorigin="anonymous" alt="" /></div>
+      <div class="item"><img src="./assets/3.png" crossorigin="anonymous" alt="" /></div>
+      <div class="item"><img src="./assets/4.png" crossorigin="anonymous" alt="" /></div>
+    </div>
+  </body>
+</html>
+<script src="https://cdn.bootcdn.net/ajax/libs/color-thief/2.4.0/color-thief.min.js"></script>
+<script>
+  const imgs = document.querySelectorAll('.container .item img')
+
+  const colorThief = new ColorThief()
+
+  imgs.forEach(vl => {
+    vl.addEventListener('mouseenter', async e => {
+      imgs.forEach(vk => {
+        vk.classList.add('fadeout')
+      })
+
+      e.target.classList.add('fadein')
+      const colors = await colorThief.getPalette(e.target, 3)
+      const [c1, c2, c3] = colors.map(c => `rgb(${c[0]}, ${c[1]}, ${c[2]})`)
+      document.body.style.setProperty('--c1', c1)
+      document.body.style.setProperty('--c2', c2)
+      document.body.style.setProperty('--c3', c3)
+    })
+
+    vl.addEventListener('mouseleave', e => {
+      imgs.forEach(vk => {
+        vk.classList.remove('fadeout')
+      })
+      e.target.classList.remove('fadein')
+      document.body.style.setProperty('--c1', '#fff')
+      document.body.style.setProperty('--c2', '#fff')
+      document.body.style.setProperty('--c3', '#fff')
+    })
+  })
+</script>

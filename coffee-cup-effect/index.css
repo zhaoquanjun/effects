@@ -1,0 +1,105 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+ul,
+ol,
+li {
+  list-style: none;
+}
+
+html,
+body {
+  padding: 160px 0;
+  width: 100%;
+  height: 100%;
+  background-color: #82580c;
+}
+
+.cup {
+  position: relative;
+  margin: 0 auto;
+  width: 260px;
+  height: 308px;
+  position: relative;
+}
+
+.cup::before {
+  position: absolute;
+  top: -13px;
+  left: 0;
+  display: block;
+  content: '';
+  width: 100%;
+  height: 26px;
+  border-radius: 50%;
+  background-color: rgba(244, 231, 245, 0.5);
+}
+
+.cup-inner {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-start;
+  height: 100%;
+  background-color: rgba(244, 231, 245, 0.85);
+  clip-path: path('m 0 0 q 4.59 295.8 29.835 300.52 c 100 9 100 9 200 0 q 29.835 -9.72 29.835 -300.52  z');
+}
+
+.cup .cup-inner .element {
+  width: 100%;
+  height: 40px;
+  border-radius: 70px/10px;
+  transition: height .9s;
+}
+
+.menus {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -53%);
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background-color: rgba(230, 201, 164, 0.95);
+  animation: rotateIn 150s linear infinite;
+}
+
+.menus .item {
+  position: absolute;
+  left: -130px;
+  top: 50%;
+  transform: translateY(-50%);
+  transform-origin: right center;
+  width: 340px;
+  height: 40px;
+  line-height: 40px;
+}
+
+.menus .item p {
+  padding: 0 16px;
+  color: #eeeeee;
+  border-radius: 2px;
+  background-color: rgba(230, 201, 164, 0.5);
+  transition: .3s;
+}
+
+.menus .item.active p {
+  transform: scale(1.08);
+  color: blueviolet;
+}
+
+.menus .item p:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+@keyframes rotateIn {
+  0% {
+    transform: translate(-50%, -53%) rotate(-180deg);
+  }
+  100% {
+    transform: translate(-50%, -53%) rotate(180deg);
+  }
+}
